@@ -21,8 +21,7 @@ Includes:
 Install the Allure engine using scoop (get scoop first if you don't have it)
     scoop install allure
 
-Modify the allureConfig.json to point to your directory to store the allure files:
-    "directory": "C:\\SeleniumTemplateProjects\\NUnitSelenium\\TestResults"
+Modify the allureConfig.json to point to your directory to store the allure files.
 
 Generate the allure report using (for example)
     allure serve C:\SeleniumTemplateProjects\NUnitSelenium\TestResults
