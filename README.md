@@ -24,8 +24,9 @@ Install the Allure engine using scoop (get scoop first if you don't have it)
 Modify the allureConfig.json to point to your directory to store the allure files.
 
 Generate the allure report using (for example)
+```
     allure serve C:\SeleniumTemplateProjects\NUnitSelenium\TestResults
-
+```
 
 ## NuGet package notes
 To get the event listener to log JS errors the application reports on the browser console, 
