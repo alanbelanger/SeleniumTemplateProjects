@@ -37,23 +37,30 @@ namespace NUnitSelenium
 
         [Test]
         [AllureSubSuite("Authenticated pages")]
-        [TestCase("freddy","mercury")] //failure case
+        [TestCase("freddy", "mercury")] //failure case
         [TestCase("username", "password")]
         public static void TestSigninValues(string user, string pass)
         {
             _authenticatedPages.GoToZeroBank(baseurl);
-            _authenticatedPages.ClickGotoSigninPage();
+            if (!_authenticatedPages.ClickGotoSigninPage())
+            {
+                _authenticatedPages.Logout();
+                _authenticatedPages.ClickGotoSigninPage();
+            }
             _authenticatedPages.FillLoginForm(user, pass);
             try
             {
-                Assert.IsFalse(driver.Url == "http://zero.webappsecurity.com/login.html?login_error=true");
+                Assert.IsTrue(driver.Url == "http://zero.webappsecurity.com/bank/account-summary.html");
                 _authenticatedPages.ClickGetStatement();
                 Assert.IsTrue(_authenticatedPages.GetStatementName() == "Statement 01/10/12(57K)");
                 _authenticatedPages.Logout();
             }
-            catch
+            catch (AssertionException)
             {
+                // It's not best practice to try/catch an assert, but this allows capturing the screenshot of failure only.
+                // Be sure to 'throw' explitly after taking the screenshot to ensure the test rightly fails.
                 _oDriverSetup.CaptureScreenshot(driver, TestContext.CurrentContext.Test.ID, TestContext.CurrentContext.Test.Name, _lifecycle);
+                throw;
             }
 
         }
@@ -63,21 +70,26 @@ namespace NUnitSelenium
         [TestCase("username", "password")]
         public static void TestAccountActivity(string user, string pass)
         {
+            _authenticatedPages.GoToZeroBank(baseurl);
+            if (!_authenticatedPages.ClickGotoSigninPage())
+            {
+                _authenticatedPages.Logout();
+                _authenticatedPages.ClickGotoSigninPage();
+            }
             try
             {
-                _authenticatedPages.GoToZeroBank(baseurl);
-                _authenticatedPages.ClickGotoSigninPage();
                 _authenticatedPages.FillLoginForm(user, pass);
-                Assert.IsFalse(driver.Url == "http://zero.webappsecurity.com/login.html?login_error=true");
+                Assert.IsTrue(driver.Url == "http://zero.webappsecurity.com/bank/account-summary.html");
                 ReadOnlyCollection<IWebElement> lResults = _authenticatedPages.GetAccountActivity();
                 Assert.True(lResults[1].Text == "ONLINE TRANSFER REF #UKKSDRQG6L");
                 _authenticatedPages.Logout();
             }
-            catch(Exception ex)
+            catch (AssertionException)
             {
                 _oDriverSetup.CaptureScreenshot(driver, TestContext.CurrentContext.Test.ID, TestContext.CurrentContext.Test.Name, _lifecycle);
-                Assert.Fail(ex.Message);
+                throw;
             }
+
         }
 
         [OneTimeTearDown]

@@ -29,6 +29,7 @@ namespace NUnitSelenium
         public bool GoToZeroBank(string url)
         {
             _currentDriver.Navigate().GoToUrl(url);
+            _currentDriver.Manage().Cookies.DeleteAllCookies();
             if (_currentDriver.Url == url)
                 return true;
             else
@@ -53,7 +54,7 @@ namespace NUnitSelenium
             {
                 _nameField.SendKeys(user);
                 _passwordField.SendKeys(pass);
-                if (_checkboxRememberMe.GetAttribute("checked") != "true")
+                if (_checkboxRememberMe.GetAttribute("checked") != "false")
                 {
                     _checkboxRememberMe.Click();
                 }
