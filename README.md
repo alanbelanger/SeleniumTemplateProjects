@@ -1,5 +1,5 @@
 # SeleniumTemplateProjects
-*** Features ***
+## Features
 
 This project is a fully-working template that does basic tests on the public site below:
     http://zero.webappsecurity.com/
@@ -16,7 +16,7 @@ Includes:
 * event listener that captures console errors from the browser
 
 
-*** Allure Reports ***
+## Allure Reports
 
 Install the Allure engine using scoop (get scoop first if you don't have it)
     scoop install allure
@@ -28,7 +28,7 @@ Generate the allure report using (for example)
     allure serve C:\SeleniumTemplateProjects\NUnitSelenium\TestResults
 
 
-*** NuGet package notes ***
+## NuGet package notes
 To get the event listener to log JS errors the application reports on the browser console, 
 you need to install the pre-release (beta) versions of 
     Selenium.Support
