@@ -1,8 +1,11 @@
 # SeleniumTemplateProjects
+
 ## Features
 
 This project is a fully-working template that does basic tests on the public site below:
-    http://zero.webappsecurity.com/
+```
+http://zero.webappsecurity.com/
+```
 The test includes some intentional failures to demonstrate the screenshot handling.
 
 WARNING: This target site is intentionally insecure, it is used for pen-testing practice. And sometimes
