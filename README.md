@@ -22,7 +22,9 @@ Includes:
 ## Allure Reports
 
 Install the Allure engine using scoop (get scoop first if you don't have it)
+```
     scoop install allure
+```
 
 Modify the allureConfig.json to point to your directory to store the allure files.
 
