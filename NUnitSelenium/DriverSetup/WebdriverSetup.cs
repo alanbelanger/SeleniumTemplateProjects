@@ -72,14 +72,14 @@ namespace NUnitSelenium
                     cOptions.AddArgument("ignore-certificate-errors");
                     cOptions.AddArgument("window-size=1900x1080");
                     cOptions.AddArgument("start-maximized");
+
                     // set logging to "Severe" and the event will add anything from the js console to the allure report
                     cOptions.SetLoggingPreference(LogType.Browser, LogLevel.All);
-                    // logging for "driver" also exists, but what does it show?
                     // cOptions.SetLoggingPreference(LogType.Driver, LogLevel.All);
                     _driver = new ChromeDriver(cOptions);
                     _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
                     _firingDriver = new EventFiringWebDriver(_driver);
-                    _firingDriver.ExceptionThrown += _firingDriver_ExceptionThrown; ;
+                    _firingDriver.ExceptionThrown += _firingDriver_ExceptionThrown; 
                     _firingDriver.Navigated += _firingDriver_Navigated;
                     return _firingDriver; 
                 case BrowserType.Firefox:
