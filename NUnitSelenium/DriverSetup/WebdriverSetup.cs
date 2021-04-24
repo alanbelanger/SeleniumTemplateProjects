@@ -16,8 +16,8 @@ namespace NUnitSelenium
     // it is still best practice if those tests do not depend upon each other for state.
     public class WebDriverSetup : IDisposable
     {
-        private static IWebDriver _driver;
-        private static EventFiringWebDriver _firingDriver;
+        private static IWebDriver driver;
+        private static EventFiringWebDriver firingDriver;
 
 
         public enum BrowserType
@@ -26,6 +26,7 @@ namespace NUnitSelenium
             Chrome,
             Firefox,
             Edge,
+            GalaxyA51
         }
 
         public WebDriverSetup()
@@ -37,7 +38,7 @@ namespace NUnitSelenium
             however, wrapping the assert in a try/catch works, so call CaptureScreenshot to get the screen at time of failure and
             attach to the Allure report.
         */
-        public bool CaptureScreenshot(IWebDriver driver, string testId, string testName, Allure.Commons.AllureLifecycle _lifecycle)
+        public bool CaptureScreenshot(IWebDriver driver, string testId, string testName, Allure.Commons.AllureLifecycle lifecycle)
         {
             try
             {
@@ -47,11 +48,11 @@ namespace NUnitSelenium
                     // + testId
                     + DateTime.Now.ToString("yyyyMMddTHHmmss");
                 ssName = Regex.Replace(ssName, @"[^0-9a-zA-Z]+", "") + ".png";
-                string screenshotFile = _lifecycle.ResultsDirectory + "\\" + ssName;
+                string screenshotFile = lifecycle.ResultsDirectory + "\\" + ssName;
                 ss.SaveAsFile(screenshotFile, ScreenshotImageFormat.Png);
 
                 // Add that file to NUnit results
-                _lifecycle.AddAttachment(screenshotFile);
+                lifecycle.AddAttachment(screenshotFile);
 
                 return true;
             }
@@ -62,7 +63,7 @@ namespace NUnitSelenium
         }
 
 
-        public static IWebDriver Create_Browser(BrowserType browserType)
+        public static IWebDriver CreateBrowser(BrowserType browserType)
         {
 
             switch (browserType)
@@ -76,25 +77,35 @@ namespace NUnitSelenium
                     // set logging to "Severe" and the event will add anything from the js console to the allure report
                     cOptions.SetLoggingPreference(LogType.Browser, LogLevel.All);
                     // cOptions.SetLoggingPreference(LogType.Driver, LogLevel.All);
-                    _driver = new ChromeDriver(cOptions);
-                    _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
-                    _firingDriver = new EventFiringWebDriver(_driver);
-                    _firingDriver.ExceptionThrown += _firingDriver_ExceptionThrown; 
-                    _firingDriver.Navigated += _firingDriver_Navigated;
-                    return _firingDriver; 
+                    driver = new ChromeDriver(cOptions);
+                    driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+                    firingDriver = new EventFiringWebDriver(driver);
+                    firingDriver.ExceptionThrown += _firingDriver_ExceptionThrown; 
+                    firingDriver.Navigated += _firingDriver_Navigated;
+                    return firingDriver; 
                 case BrowserType.Firefox:
                     FirefoxOptions options = new FirefoxOptions();
                     options.AddArgument("ignore-certificate-errors");
                     // logging does not appear to work for Firefox... 
                     options.SetLoggingPreference(LogType.Browser, LogLevel.All);
-                    _driver = new FirefoxDriver(options);
-                    _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
-                    _firingDriver = new EventFiringWebDriver(_driver);
-                    _firingDriver.ExceptionThrown += _firingDriver_ExceptionThrown; ;
-                    _firingDriver.Navigated += _firingDriver_Navigated;
-                    return _firingDriver;
+                    driver = new FirefoxDriver(options);
+                    driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+                    firingDriver = new EventFiringWebDriver(driver);
+                    firingDriver.ExceptionThrown += _firingDriver_ExceptionThrown; ;
+                    firingDriver.Navigated += _firingDriver_Navigated;
+                    return firingDriver;
                 case BrowserType.Edge:
                     return new EdgeDriver();
+                case BrowserType.GalaxyA51:
+                    ChromeOptions chromeOptions = new ChromeOptions();
+                    chromeOptions.AddAdditionalChromeOption("androidPackage", "com.android.chrome");
+                    chromeOptions.AddAdditionalChromeOption("androidDeviceSerial", "");
+                    driver = new ChromeDriver(chromeOptions);
+                    driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+                    firingDriver = new EventFiringWebDriver(driver);
+                    firingDriver.ExceptionThrown += _firingDriver_ExceptionThrown;
+                    firingDriver.Navigated += _firingDriver_Navigated;
+                    return firingDriver;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(browserType), browserType, null);
             }
@@ -118,8 +129,8 @@ namespace NUnitSelenium
 
         public void Dispose()
         {
-            _driver.Dispose();
-            _firingDriver.Dispose();
+            driver.Dispose();
+            firingDriver.Dispose();
         }
     }
 

@@ -44,7 +44,9 @@
   <ItemGroup>
     <Compile Include="DriverSetup\WebdriverSetup.cs" />
     <Compile Include="Pages\AuthenticatedPages.cs" />
+    <Compile Include="Pages\FeedbackPage.cs" />
     <Compile Include="Tests\AuthenticatedPageTests.cs" />
+    <Compile Include="Tests\FeedbackPageTests.cs" />
     <Compile Include="Tests\PublicPageTests.cs" />
     <Compile Include="Pages\PublicPages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,6 +63,9 @@
     </PackageReference>
     <PackageReference Include="NUnit3TestAdapter">
       <Version>4.0.0-beta.2</Version>
+    </PackageReference>
+    <PackageReference Include="RemoteWebDriverOptions">
+      <Version>1.0.0</Version>
     </PackageReference>
     <PackageReference Include="Selenium.Firefox.WebDriver">
       <Version>0.27.0</Version>

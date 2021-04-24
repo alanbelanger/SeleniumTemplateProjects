@@ -8,29 +8,29 @@ namespace NUnitSelenium
 {
     internal class AuthenticatedPages
     {
-        private IWebDriver _currentDriver;
-        private IWebElement _signInButton => _currentDriver.FindElement(By.CssSelector("button#signin_button"));
-        private IWebElement _nameField => _currentDriver.FindElement(By.Name("user_login"));
-        private IWebElement _passwordField => _currentDriver.FindElement(By.Name("user_password"));
-        private IWebElement _submitCredentialsButton => _currentDriver.FindElement(By.Name("submit"));
-        private IWebElement _checkboxRememberMe => _currentDriver.FindElement(By.Id("user_remember_me"));
-        private IWebElement _tabOnlineStatements => _currentDriver.FindElement(By.Id("online_statements_tab"));
-        private IWebElement _tabAccountActivity => _currentDriver.FindElement(By.Id("account_activity_tab"));
-        private ReadOnlyCollection<IWebElement> _listAccountActivities => _currentDriver.FindElements(By.XPath("//div[@id='all_transactions_for_account']/table/tbody/tr/td"));
-        private IWebElement _statementName => _currentDriver.FindElement(By.CssSelector("a[href*='.pdf']"));
-        private ReadOnlyCollection<IWebElement> _logoutDropdown => _currentDriver.FindElements(By.ClassName("dropdown-toggle"));
-        private IWebElement _logoutLink => _currentDriver.FindElement(By.CssSelector("a#logout_link"));
+        private IWebDriver currentDriver;
+        private IWebElement signInButton => currentDriver.FindElement(By.CssSelector("button#signin_button"));
+        private IWebElement nameField => currentDriver.FindElement(By.Name("user_login"));
+        private IWebElement passwordField => currentDriver.FindElement(By.Name("user_password"));
+        private IWebElement submitCredentialsButton => currentDriver.FindElement(By.Name("submit"));
+        private IWebElement checkboxRememberMe => currentDriver.FindElement(By.Id("user_remember_me"));
+        private IWebElement tabOnlineStatements => currentDriver.FindElement(By.Id("online_statements_tab"));
+        private IWebElement tabAccountActivity => currentDriver.FindElement(By.Id("account_activity_tab"));
+        private ReadOnlyCollection<IWebElement> listAccountActivities => currentDriver.FindElements(By.XPath("//div[@id='all_transactions_for_account']/table/tbody/tr/td"));
+        private IWebElement statementName => currentDriver.FindElement(By.CssSelector("a[href*='.pdf']"));
+        private ReadOnlyCollection<IWebElement> logoutDropdown => currentDriver.FindElements(By.ClassName("dropdown-toggle"));
+        private IWebElement logoutLink => currentDriver.FindElement(By.CssSelector("a#logout_link"));
 
         public AuthenticatedPages(IWebDriver driver)
         {
-            _currentDriver = driver;
+            currentDriver = driver;
         }
 
         public bool GoToZeroBank(string url)
         {
-            _currentDriver.Navigate().GoToUrl(url);
-            _currentDriver.Manage().Cookies.DeleteAllCookies();
-            if (_currentDriver.Url == url)
+            currentDriver.Navigate().GoToUrl(url);
+            currentDriver.Manage().Cookies.DeleteAllCookies();
+            if (currentDriver.Url == url)
                 return true;
             else
                 return false;
@@ -39,7 +39,7 @@ namespace NUnitSelenium
         {
             try
             {
-                _signInButton.Click();
+                signInButton.Click();
             }
             catch
             {
@@ -52,13 +52,13 @@ namespace NUnitSelenium
         {
             try
             {
-                _nameField.SendKeys(user);
-                _passwordField.SendKeys(pass);
-                if (_checkboxRememberMe.GetAttribute("checked") != "false")
+                nameField.SendKeys(user);
+                passwordField.SendKeys(pass);
+                if (checkboxRememberMe.GetAttribute("checked") != "false")
                 {
-                    _checkboxRememberMe.Click();
+                    checkboxRememberMe.Click();
                 }
-                _submitCredentialsButton.Click();
+                submitCredentialsButton.Click();
                 return true;
             }
             catch
@@ -69,25 +69,25 @@ namespace NUnitSelenium
 
         public bool ClickGetStatement()
         {
-            _tabOnlineStatements.Click();
+            tabOnlineStatements.Click();
             return true;
         }
 
         public string GetStatementName()
         {
-            return _statementName.Text;
+            return statementName.Text;
         }
 
         public ReadOnlyCollection<IWebElement> GetAccountActivity()
         {
-            _tabAccountActivity.Click();
-            return _listAccountActivities;
+            tabAccountActivity.Click();
+            return listAccountActivities;
         }
 
         public bool Logout()
         {
-            _logoutDropdown[1].Click();
-            _logoutLink.Click();
+            logoutDropdown[1].Click();
+            logoutLink.Click();
             return true;
         }
     }
