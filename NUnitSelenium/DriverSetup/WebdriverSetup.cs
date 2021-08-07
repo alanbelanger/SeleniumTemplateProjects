@@ -9,6 +9,10 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Allure.Core;
 using NUnit.Allure.Attributes;
+using System.Threading;
+
+[assembly: Parallelizable(ParallelScope.Fixtures)]
+[assembly: LevelOfParallelism(6)]
 
 namespace NUnitSelenium
 {
@@ -20,8 +24,8 @@ namespace NUnitSelenium
     /// </summary>
     public class WebDriverSetup : IDisposable
     {
-        private static IWebDriver driver;
-        private static EventFiringWebDriver firingDriver;
+        private static ThreadLocal<IWebDriver> driver = new ThreadLocal<IWebDriver>();
+        private static ThreadLocal<EventFiringWebDriver> firingDriver = new ThreadLocal<EventFiringWebDriver>();
 
         /// <summary>
         /// List of all supported browsers.
@@ -110,7 +114,6 @@ namespace NUnitSelenium
         /// <returns></returns>
         public static IWebDriver CreateBrowser(BrowserType browserType)
         {
-
             switch (browserType)
             {
                 case BrowserType.Chrome:
@@ -122,35 +125,35 @@ namespace NUnitSelenium
                     // set logging to "Severe" and the event will add anything from the js console to the allure report
                     cOptions.SetLoggingPreference(LogType.Browser, LogLevel.All);
                     // cOptions.SetLoggingPreference(LogType.Driver, LogLevel.All);
-                    driver = new ChromeDriver(cOptions);
-                    driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
-                    firingDriver = new EventFiringWebDriver(driver);
-                    firingDriver.ExceptionThrown += _firingDriver_ExceptionThrown; 
-                    firingDriver.Navigated += _firingDriver_Navigated;
-                    return firingDriver; 
+                    driver.Value = new ChromeDriver(cOptions);
+                    driver.Value.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+                    firingDriver.Value = new EventFiringWebDriver(driver.Value);
+                    firingDriver.Value.ExceptionThrown += _firingDriver_ExceptionThrown; 
+                    firingDriver.Value.Navigated += _firingDriver_Navigated;
+                    return firingDriver.Value; 
                 case BrowserType.Firefox:
                     FirefoxOptions options = new FirefoxOptions();
                     options.AddArgument("ignore-certificate-errors");
                     // logging does not appear to work for Firefox... 
                     options.SetLoggingPreference(LogType.Browser, LogLevel.All);
-                    driver = new FirefoxDriver(options);
-                    driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
-                    firingDriver = new EventFiringWebDriver(driver);
-                    firingDriver.ExceptionThrown += _firingDriver_ExceptionThrown; ;
-                    firingDriver.Navigated += _firingDriver_Navigated;
-                    return firingDriver;
+                    driver.Value = new FirefoxDriver(options);
+                    driver.Value.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+                    firingDriver.Value = new EventFiringWebDriver(driver.Value);
+                    firingDriver.Value.ExceptionThrown += _firingDriver_ExceptionThrown; ;
+                    firingDriver.Value.Navigated += _firingDriver_Navigated;
+                    return firingDriver.Value;
                 case BrowserType.Edge:
                     return new EdgeDriver();
                 case BrowserType.GalaxyA51:
                     ChromeOptions chromeOptions = new ChromeOptions();
                     chromeOptions.AddAdditionalChromeOption("androidPackage", "com.android.chrome");
                     chromeOptions.AddAdditionalChromeOption("androidDeviceSerial", "");
-                    driver = new ChromeDriver(chromeOptions);
-                    driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
-                    firingDriver = new EventFiringWebDriver(driver);
-                    firingDriver.ExceptionThrown += _firingDriver_ExceptionThrown;
-                    firingDriver.Navigated += _firingDriver_Navigated;
-                    return firingDriver;
+                    driver.Value = new ChromeDriver(chromeOptions);
+                    driver.Value.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+                    firingDriver.Value = new EventFiringWebDriver(driver.Value);
+                    firingDriver.Value.ExceptionThrown += _firingDriver_ExceptionThrown;
+                    firingDriver.Value.Navigated += _firingDriver_Navigated;
+                    return firingDriver.Value;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(browserType), browserType, null);
             }

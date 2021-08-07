@@ -11,6 +11,7 @@ using System.Reflection;
 
 namespace NUnitSelenium
 {
+    //[Ignore("testing parallel")]
     [TestFixture(WebDriverSetup.BrowserType.Chrome)]
     //[TestFixture(WebDriverSetup.BrowserType.Firefox)]
     //[TestFixture(WebDriverSetup.BrowserType.GalaxyA51)]

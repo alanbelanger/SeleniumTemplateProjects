@@ -84,7 +84,7 @@
       <Version>4.0.0-beta2</Version>
     </PackageReference>
     <PackageReference Include="Selenium.WebDriver.ChromeDriver">
-      <Version>90.0.4430.2400</Version>
+      <Version>92.0.4515.10700</Version>
     </PackageReference>
     <PackageReference Include="Vsxmd">
       <Version>1.4.5</Version>
