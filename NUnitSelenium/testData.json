@@ -1,0 +1,36 @@
+{
+  "feedbackForm": [
+    {
+      "name": "charlie",
+      "email": "charlie@angels.com",
+      "subject": "account setup",
+      "comment": "I want to set up an account today."
+    },
+    {
+      "name": "Peter O'Neil",
+      "email": "peter@yabbadabba.com",
+      "subject": "My Complaint!!",
+      "comment": "Your website lost my money i gambled away!"
+    },
+    {
+      "name": "Checker",
+      "email": "chubby@checkers.com",
+      "subject": "job inquiry - isn't it?",
+      "comment": "I'm looking for a job and noticed you didn't post one. Is that a mistake?"
+    }
+  ],
+  "loginForm": [
+    {
+      "username": "freddy",
+      "password": "mercury"
+    },
+    {
+      "username": "ding",
+      "password": "dong"
+    },
+    {
+      "username": "username",
+      "password": "password"
+    }
+  ]
+}

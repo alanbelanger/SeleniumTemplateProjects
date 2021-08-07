@@ -6,12 +6,14 @@ using NUnit.Allure.Attributes;
 
 namespace NUnitSelenium
 {
-    //[TestFixture(WebDriverSetup.BrowserType.Chrome)]
+    /// <summary>
+    /// Page Object class used by tests.
+    /// </summary>
+    [TestFixture(WebDriverSetup.BrowserType.Chrome)]
     //[TestFixture(WebDriverSetup.BrowserType.Firefox)]
-    [TestFixture(WebDriverSetup.BrowserType.GalaxyA51)]
+    //[TestFixture(WebDriverSetup.BrowserType.GalaxyA51)]
     [AllureNUnit]
     [AllureSuite("ZeroBankTests")]
-    //[AllureDisplayIgnored]
     public class PublicPageTests
     {
         private static PublicPages publicPages;
@@ -32,7 +34,6 @@ namespace NUnitSelenium
         }
 
         [Test]
-        [AllureTag("a tag")]
         [AllureSubSuite("Public pages")]
         public void TestSiteSearch()
         {

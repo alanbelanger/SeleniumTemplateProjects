@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
@@ -11,15 +12,20 @@ using NUnit.Allure.Attributes;
 
 namespace NUnitSelenium
 {
-    // The webdriver setup and teardown all happen in the test file itself, in the OneTimeSetup and OneTimeTearDown.
-    // This lets the test file use the same browser instance for all tests. This saves resources and processing, but
-    // it is still best practice if those tests do not depend upon each other for state.
+    /// <summary>
+    /// The webdriver setup and teardown all happen in the test file itself, in the OneTimeSetup and OneTimeTearDown.
+    /// 
+    /// This lets the test file use the same browser instance for all tests. This saves resources and processing, 
+    /// but it is still best practice if those tests do not depend upon each other for state. 
+    /// </summary>
     public class WebDriverSetup : IDisposable
     {
         private static IWebDriver driver;
         private static EventFiringWebDriver firingDriver;
 
-
+        /// <summary>
+        /// List of all supported browsers.
+        /// </summary>
         public enum BrowserType
         {
             NotSet,
@@ -33,11 +39,14 @@ namespace NUnitSelenium
         {
         }
 
-        /* 
-            There does not seem to be an event that fires when an Assert fails (so not trapped by _firingDriver_ExceptionThrown);
-            however, wrapping the assert in a try/catch works, so call CaptureScreenshot to get the screen at time of failure and
-            attach to the Allure report.
-        */
+        /// <summary>
+        /// Take a screenshot, save to a file and attach to allure report.
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <param name="testId"></param>
+        /// <param name="testName"></param>
+        /// <param name="lifecycle"></param>
+        /// <returns></returns>
         public bool CaptureScreenshot(IWebDriver driver, string testId, string testName, Allure.Commons.AllureLifecycle lifecycle)
         {
             try
@@ -62,7 +71,43 @@ namespace NUnitSelenium
             }
         }
 
+        /// <summary>
+        /// Take a screenshot, save to a file and make accessible to NUnit's results.
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <param name="testId"></param>
+        /// <param name="testName"></param>
+        /// <param name="testContext"></param>
+        /// <returns></returns>
+        public bool CaptureScreenshot(IWebDriver driver, string testId, string testName, TestContext testContext)
+        {
+            try
+            {
+                // Get the screenshot from Selenium WebDriver and save it to a file
+                Screenshot ss = ((ITakesScreenshot)driver).GetScreenshot();
+                string ssName = testName
+                    // + testId
+                    + DateTime.Now.ToString("yyyyMMddTHHmmss");
+                ssName = Regex.Replace(ssName, @"[^0-9a-zA-Z]+", "") + ".png";
+                string screenshotFile = Path.Combine(TestContext.CurrentContext.WorkDirectory, ssName);
+                ss.SaveAsFile(screenshotFile, ScreenshotImageFormat.Png);
 
+                // Add that file to NUnit results
+                TestContext.AddTestAttachment(screenshotFile);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// CreateBrowser returns an IWebBrowser object to be used by page object classes.
+        /// </summary>
+        /// <param name="browserType"></param>
+        /// <returns></returns>
         public static IWebDriver CreateBrowser(BrowserType browserType)
         {
 

@@ -7,7 +7,7 @@ namespace NUnitSelenium
 {
     internal class PublicPages
     {
-        private IWebDriver currentDriver;
+        private readonly IWebDriver currentDriver;
         private IWebElement searchBox => currentDriver.FindElement(By.Id("searchTerm"));
         private IList<IWebElement> searchResults => currentDriver.FindElements(By.CssSelector("div.top_offset>ul>li"));
 

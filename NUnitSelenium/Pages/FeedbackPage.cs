@@ -21,25 +21,25 @@ namespace NUnitSelenium
             private IWebElement clearButton => currentDriver.FindElement(By.CssSelector("input.btn[type='reset']"));
             private IList<IWebElement> searchresults => currentDriver.FindElements(By.CssSelector("div.top_offset>ul>li"));
 
-            public string Name   // property
+            public string Name
             {
-                get { return name.GetAttribute("value"); }   // get method
-                set { name.SendKeys(value); }  // set method
+                get { return name.GetAttribute("value"); }
+                set { name.SendKeys(value); }
             }
-            public string Email // property
+            public string Email
             {
-                get { return email.GetAttribute("value"); }   // get method
-                set { email.SendKeys(value); }  // set method
+                get { return email.GetAttribute("value"); }
+                set { email.SendKeys(value); }
             }
-            public string Subject // property
+            public string Subject
             {
-                get { return subject.GetAttribute("value"); }   // get method
-                set { subject.SendKeys(value); }  // set method
+                get { return subject.GetAttribute("value"); }
+                set { subject.SendKeys(value); }
             }
-            public string Comment   // property
+            public string Comment
             {
-                get { return comment.GetAttribute("value"); }   // get method
-                set { comment.SendKeys(value); }  // set method
+                get { return comment.GetAttribute("value"); }
+                set { comment.SendKeys(value); }
             }
             public FeedbackPage(IWebDriver driver)
             {
