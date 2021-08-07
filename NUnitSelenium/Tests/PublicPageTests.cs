@@ -6,38 +6,40 @@ using NUnit.Allure.Attributes;
 
 namespace NUnitSelenium
 {
+    /// <summary>
+    /// Page Object class used by tests.
+    /// </summary>
     [TestFixture(WebDriverSetup.BrowserType.Chrome)]
-    [TestFixture(WebDriverSetup.BrowserType.Firefox)]
+    //[TestFixture(WebDriverSetup.BrowserType.Firefox)]
+    //[TestFixture(WebDriverSetup.BrowserType.GalaxyA51)]
     [AllureNUnit]
     [AllureSuite("ZeroBankTests")]
-    //[AllureDisplayIgnored]
     public class PublicPageTests
     {
-        private static PublicPages _publicPages;
-        private static WebDriverSetup.BrowserType _mybrowser;
+        private static PublicPages publicPages;
+        private static WebDriverSetup.BrowserType myBrowser;
         private static IWebDriver driver;
         private static String baseurl = "http://zero.webappsecurity.com/";
         
         public PublicPageTests(WebDriverSetup.BrowserType browser)
         {
-            _mybrowser = browser;
+            myBrowser = browser;
         }
 
         [OneTimeSetUp]
         public static void WebdriverSetup()
         {
-            driver = WebDriverSetup.Create_Browser(_mybrowser);
-            _publicPages = new PublicPages(driver);
+            driver = WebDriverSetup.CreateBrowser(myBrowser);
+            publicPages = new PublicPages(driver);
         }
 
         [Test]
-        [AllureTag("a tag")]
         [AllureSubSuite("Public pages")]
         public void TestSiteSearch()
         {
-            _publicPages.GoToZeroBank(baseurl);
-            _publicPages.SearchForText("account");
-            int cellcount = _publicPages.SearchResultCount();
+            publicPages.GoToZeroBank(baseurl);
+            publicPages.SearchForText("account");
+            int cellcount = publicPages.SearchResultCount();
             Assert.IsTrue(cellcount == 2);
         }
 
@@ -45,7 +47,7 @@ namespace NUnitSelenium
         [AllureSubSuite("Public pages")]
         public void TestTitle()
         {
-            _publicPages.GoToZeroBank(baseurl);
+            publicPages.GoToZeroBank(baseurl);
             Assert.IsTrue(driver.Title == "Zero - Personal Banking - Loans - Credit Cards");
         }
 
