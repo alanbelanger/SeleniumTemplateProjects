@@ -11,8 +11,8 @@ using NUnit.Allure.Core;
 using NUnit.Allure.Attributes;
 using System.Threading;
 
-[assembly: Parallelizable(ParallelScope.Fixtures)]
-[assembly: LevelOfParallelism(6)]
+//[assembly: Parallelizable(ParallelScope.Fixtures)]
+//[assembly: LevelOfParallelism(6)]
 
 namespace NUnitSelenium
 {
